@@ -4,14 +4,17 @@ from pathlib import Path
 import sys
 import random
 from itertools import combinations
+seed = random.randint(1,100)
+random.seed(seed)
 def print_progress_bar(index, total, label):
     n_bar = 50  # Progress bar width
     progress = index / total
     sys.stdout.write('\r')
     sys.stdout.write(f"[{'=' * int(n_bar * progress):{n_bar}s}] {int(100 * progress)}%  {label}")
     sys.stdout.flush()
-path = "C://Users//QRcodekiki//OneDrive - Mahidol University//MS_CS//2T2//ITCS697 THESIS//Thesis//CodeCloneExplainability//Project_CodeNet_Java250//Project_CodeNet_Java250"
-# path = "C://Users//QRcodekiki//OneDrive - Mahidol University//MS_CS//2T2//ITCS697 THESIS//Thesis//CodeCloneExplainability//googlejam4//googlejam4_src"
+# path = "C://Users//QRcodekiki//OneDrive - Mahidol University//MS_CS//2T2//ITCS697 THESIS//Thesis//CodeCloneExplainability//Project_CodeNet_Java250//Project_CodeNet_Java250"
+path = "C://Users//QRcodekiki//OneDrive - Mahidol University//MS_CS//2T2//ITCS697 THESIS//Thesis//CodeCloneExplainability//googlejam4//googlejam4_src"
+# path = "C://Users//QRcodekiki//OneDrive - Mahidol University//MS_CS//2T2//ITCS697 THESIS//Thesis//CodeCloneExplainability//test"
 dir_folder = os.listdir(path)
 dic_folder_clone = {}
 
@@ -28,14 +31,15 @@ with open("data.jsonl", "w") as outfile:
                 with open(path+"//"+x+"//"+y, 'r',encoding='cp850') as f:
                     function = str(f.read())
                 data= dict(func=function,idx=(str(x).zfill(2)+str(num).zfill(3)))
-                json.dump(data, outfile)
-                outfile.write('\n')
+                # json.dump(data, outfile)
+                # outfile.write('\n')
                 value.append((str(x).zfill(2)+str(num).zfill(3)))
                 num += 1
                 count += 1
                 count_function += 1
                 print_progress_bar(count, len(os.listdir(path+"//"+x)), "loading.. function in data.jsonl "+x)
         dic_folder_clone[x] =value    
+print("\nSeed: ",seed)
 print("\nNumber of function in data.jsonl: ",count_function)
 
 clone_pair = {}
@@ -46,7 +50,9 @@ unclone_pair = []
 with open("test.txt", "w") as outfile:
     while(num_clone!=24959):
         # rundom clone 
+        # random.seed(seed)
         key_clone = random.choice(list(clone_pair.keys()))
+        # random.seed(seed)
         clone =  random.choice(list(clone_pair[key_clone]))
         clone_pair[key_clone].remove(clone)
         if len(clone_pair[key_clone]) == 0 :
@@ -56,10 +62,14 @@ with open("test.txt", "w") as outfile:
         unclone_check = True
         while(unclone_check):
             all_key = list(dic_folder_clone.keys())
+            # random.seed(seed)
             key1 = random.choice(all_key)
             all_key.remove(key1)
+            # random.seed(seed)
             key2 = random.choice(all_key)
+            # random.seed(seed)
             value1 = random.choice(list(dic_folder_clone[key1]))
+            # random.seed(seed)
             value2 = random.choice(list(dic_folder_clone[key2]))
             unclone = [value1,value2]
             unclone.sort()
